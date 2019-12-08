@@ -104,7 +104,7 @@ for (key in dataBusInfo) {
 			dataBusInfo[key]["BusCode"]
 		] = {
 			distance: distance,
-			isGoRoute: true
+			isGoRoute: false
 		};
 	}
 }

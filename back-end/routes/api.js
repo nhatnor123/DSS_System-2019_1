@@ -9,6 +9,9 @@ let {
 let {
 	find_K_Route_Between_2_Location
 } = require("../controllers/kShortestPath/main");
+let {
+	searchRouteBetween2Stations
+} = require("../controllers/routeBetween2Stations/index");
 
 // let {dataBusInfo, } = require("../controllers/ver1/test")
 
@@ -30,16 +33,23 @@ router.get("/getDataStation", function(req, res, next) {
 	);
 });
 
+// sai vì k tạo đc nhiều cạnh (>= 1 cạnh chiều thuận và ngược) giữa 2 node trong đồ thị có hướng
 router.post("/find_K_Route_Between_2_Location", (req, res, next) => {
 	console.log(req.body);
-	console.log(
-		find_K_Route_Between_2_Location(
-			req.body.fromStation,
-			req.body.toStation,
-			5
-		)
+	let kRoute = find_K_Route_Between_2_Location(
+		req.body.fromStation,
+		req.body.toStation,
+		5
 	);
-	res.send("ahhihi");
+	res.send(kRoute);
+});
+
+router.post("/searchRouteBetween2Stations", (req, res, next) => {
+	let routeResult = searchRouteBetween2Stations(
+		req.body.fromStation,
+		req.body.toStation
+	);
+	res.send(routeResult);
 });
 
 module.exports = router;

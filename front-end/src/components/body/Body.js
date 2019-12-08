@@ -17,6 +17,9 @@ class Body extends Component {
 		this.searchKRouteBetweenFromAndToStation = this.searchKRouteBetweenFromAndToStation.bind(
 			this
 		);
+		this.searchRouteBetween2Stations = this.searchRouteBetween2Stations.bind(
+			this
+		);
 	}
 
 	async componentDidMount() {
@@ -26,7 +29,9 @@ class Body extends Component {
 		console.log(resDataStation);
 		this.setState({
 			...this.state,
-			dataStations: resDataStation
+			dataStations: resDataStation,
+			fromStation: resDataStation[0]["Name"],
+			toStation: resDataStation[0]["Name"]
 		});
 	}
 
@@ -47,6 +52,19 @@ class Body extends Component {
 		let resData = (
 			await axios.post(
 				`${IPServerAdress}api/find_K_Route_Between_2_Location`,
+				{
+					fromStation: this.state.fromStation,
+					toStation: this.state.toStation
+				}
+			)
+		).data;
+		console.log(resData);
+	}
+
+	async searchRouteBetween2Stations() {
+		let resData = (
+			await axios.post(
+				`${IPServerAdress}api/searchRouteBetween2Stations`,
 				{
 					fromStation: this.state.fromStation,
 					toStation: this.state.toStation
@@ -82,6 +100,11 @@ class Body extends Component {
 				<div>
 					<button onClick={this.searchKRouteBetweenFromAndToStation}>
 						Search k shortest path
+					</button>
+				</div>
+				<div>
+					<button onClick={this.searchRouteBetween2Stations}>
+						Search Route Between 2 Stations
 					</button>
 				</div>
 			</div>

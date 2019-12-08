@@ -4,11 +4,13 @@ let { stationsGraph, dataBusBetween2Locations } = require("./stationsGraph");
 // let { dataBusInfo, dataBuses, dataStations } = require("./test.js");
 
 let find_K_Route_Between_2_Location = (startStation, endStation, k) => {
-    console.log("ahihi")
-    // hàm lấy k shortest path
-    console.log(startStation, endStation, k)
+
+	// hàm lấy k shortest path
+	console.log(startStation, endStation, k);
 	let result = ksp.ksp(stationsGraph, startStation, endStation, k);
 	console.log(result);
+
+	const finalResult = [];
 
 	// hàm so khớp, lấy lộ trình đầy đủ từ kết quả trong k shortest path
 	for (let i = 0; i < result.length; i++) {
@@ -77,7 +79,9 @@ let find_K_Route_Between_2_Location = (startStation, endStation, k) => {
 
 		// console.log("AFTER")
 		console.log(finalRouteForEachResult); // kết quả cuối cùng
+		finalResult.push(finalRouteForEachResult);
 	}
+	return finalResult;
 };
 
 exports.find_K_Route_Between_2_Location = find_K_Route_Between_2_Location;
