@@ -5,15 +5,17 @@ let {dataBusInfo, dataBuses, dataStations} = require("../controllers/ver1/test.j
 // let {dataBusInfo, } = require("../controllers/ver1/test")
 
 router.get("/", (req, res, next) => {
-    // console.log(dataBusInfo)
-    console.log(dataStations)
+   
     return res.send("/api ");
-    // return dataBusInfo
+
 });
 
 
 router.get("/getDataStation", function(req, res, next) {
 	res.json(dataStations.map(item=>{
+        if (item.StationID == 205){
+            console.log(item)
+        }
         return {
             StationID:item.StationID,
             Name:item.Name
