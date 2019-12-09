@@ -1,7 +1,7 @@
 const graphlig = require("graphlib");
 let g = new graphlig.Graph();
 
-let { dataBusInfo } = require("../getData/fakeData.js");
+let { dataBusInfo } = require("../ver2/fakeData.js");
 
 let dataBusBetween2Locations = {};
 
@@ -42,12 +42,12 @@ for (key in dataBusInfo) {
 						);
 					})[0]
 				)[0]
-			).toFixed(1)
+			).toFixed(2)
 		);
 
 		// console.log(startStation + " : " + endStation + " : " + distance);
 
-		g.setEdge(startStation, endStation, distance);
+		// g.setEdge(startStation, endStation, distance);
 
 		createNestedObject(dataBusBetween2Locations, [
 			startStation,
@@ -84,12 +84,12 @@ for (key in dataBusInfo) {
 						);
 					})[0]
 				)[0]
-			).toFixed(1)
+			).toFixed(2)
 		);
 
 		// console.log(startStation + " : " + endStation + " : " + distance);
 
-		g.setEdge(startStation, endStation, distance);
+		// g.setEdge(startStation, endStation, distance);
 
 		createNestedObject(dataBusBetween2Locations, [
 			startStation,
@@ -103,6 +103,19 @@ for (key in dataBusInfo) {
 			distance: distance,
 			isGoRoute: false
 		};
+	}
+}
+
+//
+for (let fromLocation in dataBusBetween2Locations) {
+	for (let toLocation in dataBusBetween2Locations[fromLocation]) {
+		let minDistance = Math.min(
+			...Object.values(
+				dataBusBetween2Locations[fromLocation][toLocation]
+			).map(item => item.distance)
+		);
+		// console.log(minDistance);
+		g.setEdge(fromLocation, toLocation, minDistance);
 	}
 }
 

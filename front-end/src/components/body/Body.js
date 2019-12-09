@@ -3,13 +3,16 @@ import "./Body.css";
 import axios from "axios";
 import { IPServerAdress } from "../../config/IP_Server.js";
 
+import Select from "react-select";
+
 class Body extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			dataStations: [],
 			fromStation: "",
-			toStation: ""
+			toStation: "",
+			options: []
 		};
 
 		this.selectFromStation = this.selectFromStation.bind(this);
@@ -17,7 +20,7 @@ class Body extends Component {
 		this.searchKRouteBetweenFromAndToStation = this.searchKRouteBetweenFromAndToStation.bind(
 			this
 		);
-		this.searchRouteBetween2Stations = this.searchRouteBetween2Stations.bind(
+		this.getSuggestedTravelRoute = this.getSuggestedTravelRoute.bind(
 			this
 		);
 	}
@@ -31,20 +34,26 @@ class Body extends Component {
 			...this.state,
 			dataStations: resDataStation,
 			fromStation: resDataStation[0]["Name"],
-			toStation: resDataStation[0]["Name"]
+			toStation: resDataStation[0]["Name"],
+			options: resDataStation.map(item => {
+				return {
+					value: item.Name,
+					label: `${item.StationID} : ${item.Name}`
+				};
+			})
 		});
 	}
 
-	selectFromStation(event) {
-		console.log(event.target.value);
+	selectFromStation(selectedOption) {
+		console.log(selectedOption);
 		this.setState({
-			fromStation: event.target.value
+			fromStation: selectedOption.value
 		});
 	}
-	selectToStation(event) {
-		console.log(event.target.value);
+	selectToStation(selectedOption) {
+		console.log(selectedOption);
 		this.setState({
-			toStation: event.target.value
+			toStation: selectedOption.value
 		});
 	}
 
@@ -61,10 +70,10 @@ class Body extends Component {
 		console.log(resData);
 	}
 
-	async searchRouteBetween2Stations() {
+	async getSuggestedTravelRoute() {
 		let resData = (
 			await axios.post(
-				`${IPServerAdress}api/searchRouteBetween2Stations`,
+				`${IPServerAdress}api/getSuggestedTravelRoute`,
 				{
 					fromStation: this.state.fromStation,
 					toStation: this.state.toStation
@@ -76,35 +85,41 @@ class Body extends Component {
 
 	render() {
 		return (
-			<div>
+			<div style={{ width: "80%" }}>
 				<div>
 					<div>From</div>
-					<select onChange={this.selectFromStation}>
-						{this.state.dataStations.map(item => (
-							<option value={item.Name}>
-								{item.StationID} : {item.Name}
-							</option>
-						))}
-					</select>
+					<div style={{ width: "100%" }}>
+						<Select
+							// value={this.state.fromStation}
+							onChange={this.selectFromStation}
+							options={this.state.options}
+						/>
+					</div>
 				</div>
 				<div>
 					<div>To</div>
-					<select onChange={this.selectToStation}>
-						{this.state.dataStations.map(item => (
-							<option value={item.Name}>
-								{item.StationID} : {item.Name}
-							</option>
-						))}
-					</select>
+					<div style={{ width: "100%" }}>
+						<Select
+							// value={this.state.toStation}
+							onChange={this.selectToStation}
+							options={this.state.options}
+						/>
+					</div>
 				</div>
-				<div>
-					<button onClick={this.searchKRouteBetweenFromAndToStation}>
-						Search k shortest path
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.searchKRouteBetweenFromAndToStation}
+						style={{ fontSize: "20px" }}
+					>
+						Search k shortest path 
 					</button>
 				</div>
-				<div>
-					<button onClick={this.searchRouteBetween2Stations}>
-						Search Route Between 2 Stations
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.getSuggestedTravelRoute}
+						style={{ fontSize: "20px" }}
+					>
+						Get Suggested Travel Routes
 					</button>
 				</div>
 			</div>

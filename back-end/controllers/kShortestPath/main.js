@@ -4,7 +4,6 @@ let { stationsGraph, dataBusBetween2Locations } = require("./stationsGraph");
 // let { dataBusInfo, dataBuses, dataStations } = require("./test.js");
 
 let find_K_Route_Between_2_Location = (startStation, endStation, k) => {
-
 	// hàm lấy k shortest path
 	console.log(startStation, endStation, k);
 	let result = ksp.ksp(stationsGraph, startStation, endStation, k);
@@ -29,6 +28,14 @@ let find_K_Route_Between_2_Location = (startStation, endStation, k) => {
 				if (
 					tempData[key]["distance"] == result[i]["edges"][j]["weight"]
 				) {
+					// console.log("test")
+					// console.log({
+					// 	from: result[i]["edges"][j]["fromNode"],
+					// 	to: result[i]["edges"][j]["toNode"],
+					// 	busCode: key,
+					// 	distance: tempData[key]["distance"],
+					// 	isGoRoute: tempData[key]["isGoRoute"]
+					// });
 					// console.log(key);
 					// console.log(tempData[key]);
 					routeForEachResult.push({
@@ -38,6 +45,7 @@ let find_K_Route_Between_2_Location = (startStation, endStation, k) => {
 						distance: tempData[key]["distance"],
 						isGoRoute: tempData[key]["isGoRoute"]
 					});
+					break; // chưa xử lý đoạn tách trường hợp các đoạn bằng nhau nên tách
 				}
 				// console.log(tempData[key]["distance"] == result[i]["edges"][j]["weight"])
 			}
