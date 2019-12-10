@@ -12,7 +12,8 @@ class Body extends Component {
 			dataStations: [],
 			fromStation: "",
 			toStation: "",
-			options: []
+			options: [],
+			phuongAn: null
 		};
 
 		this.selectFromStation = this.selectFromStation.bind(this);
@@ -20,9 +21,9 @@ class Body extends Component {
 		this.searchKRouteBetweenFromAndToStation = this.searchKRouteBetweenFromAndToStation.bind(
 			this
 		);
-		this.getSuggestedTravelRoute = this.getSuggestedTravelRoute.bind(
-			this
-		);
+		this.getSuggestedTravelRoute = this.getSuggestedTravelRoute.bind(this);
+		this.getNormalizedData = this.getNormalizedData.bind(this);
+		this.getTOPSISData = this.getTOPSISData.bind(this);
 	}
 
 	async componentDidMount() {
@@ -72,8 +73,18 @@ class Body extends Component {
 
 	async getSuggestedTravelRoute() {
 		let resData = (
+			await axios.post(`${IPServerAdress}api/getSuggestedTravelRoute`, {
+				fromStation: this.state.fromStation,
+				toStation: this.state.toStation
+			})
+		).data;
+		console.log(resData);
+	}
+
+	async getNormalizedData() {
+		let resData = (
 			await axios.post(
-				`${IPServerAdress}api/getSuggestedTravelRoute`,
+				`${IPServerAdress}api/normalizeDataFromSearchPossibleTravelRoute`,
 				{
 					fromStation: this.state.fromStation,
 					toStation: this.state.toStation
@@ -81,6 +92,19 @@ class Body extends Component {
 			)
 		).data;
 		console.log(resData);
+	}
+
+	async getTOPSISData() {
+		let resData = (
+			await axios.post(`${IPServerAdress}api/topsis`, {
+				fromStation: this.state.fromStation,
+				toStation: this.state.toStation
+			})
+		).data;
+		console.log(resData);
+		this.setState({
+			phuongAn: resData
+		});
 	}
 
 	render() {
@@ -111,7 +135,7 @@ class Body extends Component {
 						onClick={this.searchKRouteBetweenFromAndToStation}
 						style={{ fontSize: "20px" }}
 					>
-						Search k shortest path 
+						Search k shortest path
 					</button>
 				</div>
 				<div style={{ marginTop: "15px" }}>
@@ -122,6 +146,151 @@ class Body extends Component {
 						Get Suggested Travel Routes
 					</button>
 				</div>
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.getNormalizedData}
+						style={{ fontSize: "20px" }}
+					>
+						Get Normalized Data
+					</button>
+				</div>
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.getTOPSISData}
+						style={{ fontSize: "20px" }}
+					>
+						Get TOPSIS Data
+					</button>
+				</div>
+				{this.state.phuongAn !== null && (
+					<div style={{ marginTop: "20px" }}>
+						<table>
+							<thead>
+								<tr>
+									<th style={{ width: "5%" }}> STT </th>
+									<th style={{ width: "50%" }}>Lộ trình</th>
+									<th style={{ width: "8%" }}>
+										Quãng đường di chuyển
+									</th>
+									<th style={{ width: "8%" }}>
+										Thời gian đợi xe
+									</th>
+									<th style={{ width: "8%" }}>
+										Thời gian di chuyển
+									</th>
+									<th style={{ width: "8%" }}>Tổng giá vé</th>
+									<th style={{ width: "8%" }}>
+										Số lần chuyển xe
+									</th>
+									<th style={{ width: "5%" }}>
+										Độ tương tự tới phương án lí tưởng
+									</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								{this.state.phuongAn.possibleTravelRoute.map(
+									item => {
+										return (
+											<tr>
+												<td style={{ width: "5%" }}>
+													{this.state.phuongAn.possibleTravelRoute.indexOf(
+														item
+													) + 1}
+												</td>
+												<td style={{ width: "50%" }}>
+													<div
+														style={{
+															margin:
+																"10px 5px 10px 12px"
+														}}
+													>
+														{item["route"].map(
+															itemRoute => (
+																<div
+																	style={{
+																		textAlign:
+																			"left"
+																	}}
+																>
+																	{
+																		itemRoute[
+																			"from"
+																		]
+																	}{" "}
+																	--->{" "}
+																	{
+																		itemRoute[
+																			"to"
+																		]
+																	}
+																	{" : "} xe
+																	bus{" "}
+																	{
+																		itemRoute[
+																			"busCode"
+																		]
+																	}{" "}
+																	( chiều{" "}
+																	{itemRoute[
+																		"isGoRoute"
+																	] && "đi"}
+																	{!itemRoute[
+																		"isGoRoute"
+																	] && "về"}
+																	), giá{" "}
+																	{
+																		itemRoute[
+																			"price"
+																		]
+																	}{" "}
+																	đồng
+																</div>
+															)
+														)}
+													</div>
+												</td>
+												<td style={{ width: "8%" }}>
+													{item["traveledDistance"]} (
+													km)
+												</td>
+												<td style={{ width: "8%" }}>
+													{item["waitingTime"]} (
+													phút)
+												</td>
+												<td style={{ width: "8%" }}>
+													{item["travelTime"]} ( phút)
+												</td>
+												<td style={{ width: "8%" }}>
+													{item["totalPrice"]} ( đồng)
+												</td>
+												<td style={{ width: "8%" }}>
+													{
+														item[
+															"numberOfBusTransfers"
+														]
+													}{" "}
+													( lần)
+												</td>
+												<td style={{ width: "5%" }}>
+													{
+														this.state.phuongAn.topsisData[
+															parseInt(
+																this.state.phuongAn.possibleTravelRoute.indexOf(
+																	item
+																)
+															)
+														]
+													}
+												</td>
+											</tr>
+										);
+									}
+								)}
+							</tbody>
+						</table>
+					</div>
+				)}
 			</div>
 		);
 	}
