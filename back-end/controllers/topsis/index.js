@@ -1,9 +1,9 @@
 let topsis = (originalNormalizedData, trongSoCuaCacThuocTinh) => {
-	console.log("ahihiiiii");
+	console.log("bat dau TOPSIS");
 	//tính giá trị theo trọng số
 	let normalizedData = originalNormalizedData.map(item => {
-		console.log(originalNormalizedData);
-		console.log(trongSoCuaCacThuocTinh);
+		// console.log(originalNormalizedData);
+		// console.log(trongSoCuaCacThuocTinh);
 		return {
 			...item,
 			numberOfBusTransfers:
@@ -16,6 +16,43 @@ let topsis = (originalNormalizedData, trongSoCuaCacThuocTinh) => {
 		};
 	});
 
+	console.log("Dữ liệu dã được chuẩn hóa");
+	for (let item in originalNormalizedData) {
+		console.log(
+			"Phương án " +
+				(parseInt(item) + 1) +
+				" :      " +
+				originalNormalizedData[item]["numberOfBusTransfers"].toFixed(
+					4
+				) +
+				"   " +
+				originalNormalizedData[item]["totalPrice"].toFixed(4) +
+				"   " +
+				originalNormalizedData[item]["travelTime"].toFixed(4) +
+				"   " +
+				originalNormalizedData[item]["traveledDistance"].toFixed(4) +
+				"   " +
+				originalNormalizedData[item]["waitingTime"].toFixed(4)
+		);
+	}
+
+	console.log("tính giá trị theo trọng số");
+	for (let item in normalizedData) {
+		console.log(
+			"Phương án " +
+				(parseInt(item) + 1) +
+				" :      " +
+				normalizedData[item]["numberOfBusTransfers"].toFixed(4) +
+				"   " +
+				normalizedData[item]["totalPrice"].toFixed(4) +
+				"   " +
+				normalizedData[item]["travelTime"].toFixed(4) +
+				"   " +
+				normalizedData[item]["traveledDistance"].toFixed(4) +
+				"   " +
+				normalizedData[item]["waitingTime"].toFixed(4)
+		);
+	}
 	// phương án lí tưởng tốt và xấu
 	let phuongAnLiTuongTot = [
 		Math.max(...normalizedData.map(item => item["numberOfBusTransfers"])),
@@ -31,8 +68,9 @@ let topsis = (originalNormalizedData, trongSoCuaCacThuocTinh) => {
 		Math.min(...normalizedData.map(item => item["traveledDistance"])),
 		Math.min(...normalizedData.map(item => item["waitingTime"]))
 	];
-
+	console.log("Phương án lí tưởng tốt");
 	console.log(phuongAnLiTuongTot);
+	console.log("Phương án lí tưởng xấu");
 	console.log(phuongAnLiTuongXau);
 
 	// khoảng cách từng phương án tới p.án lí tưởng tốt và xấu
@@ -55,7 +93,9 @@ let topsis = (originalNormalizedData, trongSoCuaCacThuocTinh) => {
 		);
 	});
 
+	console.log("khoảng cách lí tưởng tốt");
 	console.log(khoangCachToiLiTuongTot);
+	console.log("khoảng cách lí tưởng xấu");
 	console.log(khoangCachToiLiTuongXau);
 
 	// độ tương tự tới phương án lí tưởng
@@ -67,6 +107,8 @@ let topsis = (originalNormalizedData, trongSoCuaCacThuocTinh) => {
 
 		doTuongTuToiPhuongAnLiTuong.push(doTuongTuToiPALiTuong);
 	}
+
+	console.log("độ tương tự tới phương án lí tưởng");
 	console.log(doTuongTuToiPhuongAnLiTuong);
 
 	return doTuongTuToiPhuongAnLiTuong;

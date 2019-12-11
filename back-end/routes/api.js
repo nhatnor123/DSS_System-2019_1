@@ -94,7 +94,16 @@ router.post("/topsis", (req, res, next) => {
 	let normalizedData = normalizeData(possibleTravelRoute);
 	let topsisData = topsis(normalizedData, boTrongSo);
 
-	res.send({ possibleTravelRoute, topsisData });
+	for (let index = 0; index < possibleTravelRoute.length; index++) {
+		possibleTravelRoute[index]["topsisData"] = topsisData[index];
+	}
+
+	// sort các phương án theo điểm TOPSIS
+	possibleTravelRoute.sort((x, y) => {
+		return -x["topsisData"] + y["topsisData"];
+	});
+
+	res.send({ possibleTravelRoute });
 });
 
 module.exports = router;

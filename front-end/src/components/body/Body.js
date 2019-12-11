@@ -111,7 +111,7 @@ class Body extends Component {
 		return (
 			<div style={{ width: "80%" }}>
 				<div>
-					<div>From</div>
+					<div style={{fontSize:"30px" ,marginTop:"10px"}}>From</div>
 					<div style={{ width: "100%" }}>
 						<Select
 							// value={this.state.fromStation}
@@ -121,7 +121,7 @@ class Body extends Component {
 					</div>
 				</div>
 				<div>
-					<div>To</div>
+				<div style={{fontSize:"30px", marginTop:"10px"}}>To</div>
 					<div style={{ width: "100%" }}>
 						<Select
 							// value={this.state.toStation}
@@ -130,7 +130,7 @@ class Body extends Component {
 						/>
 					</div>
 				</div>
-				<div style={{ marginTop: "15px" }}>
+				{/* <div style={{ marginTop: "15px" }}>
 					<button
 						onClick={this.searchKRouteBetweenFromAndToStation}
 						style={{ fontSize: "20px" }}
@@ -161,7 +161,17 @@ class Body extends Component {
 					>
 						Get TOPSIS Data
 					</button>
+				</div> */}
+
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.getTOPSISData}
+						style={{ fontSize: "30px" }}
+					>
+						Search
+					</button>
 				</div>
+
 				{this.state.phuongAn !== null && (
 					<div style={{ marginTop: "20px" }}>
 						<table>
@@ -255,8 +265,7 @@ class Body extends Component {
 													km)
 												</td>
 												<td style={{ width: "8%" }}>
-													{item["waitingTime"]} (
-													phút)
+													{item["waitingTime"]}( phút)
 												</td>
 												<td style={{ width: "8%" }}>
 													{item["travelTime"]} ( phút)
@@ -273,15 +282,9 @@ class Body extends Component {
 													( lần)
 												</td>
 												<td style={{ width: "5%" }}>
-													{
-														this.state.phuongAn.topsisData[
-															parseInt(
-																this.state.phuongAn.possibleTravelRoute.indexOf(
-																	item
-																)
-															)
-														]
-													}
+													{item["topsisData"].toFixed(
+														4
+													)}
 												</td>
 											</tr>
 										);
