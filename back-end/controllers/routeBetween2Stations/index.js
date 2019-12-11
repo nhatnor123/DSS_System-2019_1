@@ -1,5 +1,5 @@
 let { dataBusBetween2Locations } = require("../kShortestPath/stationsGraph.js");
-let { dataBusInfo, dataBuses, dataStations } = require("../ver2/fakeData");
+let { dataBusInfo, dataBuses, dataStations } = require("../ver3/fakeData");
 
 let searchPossibleTravelRoute = (fromStation, toStation, kShortestPath) => {
 	let possibleTravelRoute = [];
@@ -129,8 +129,15 @@ let searchPossibleTravelRoute = (fromStation, toStation, kShortestPath) => {
 			//thời gian đợi xe
 			if (stepBusComing.length !== 0) {
 				waitingTime += stepBusComing[0]["time"];
+
+				// console.log(waitingTime)
 			} else {
-				waitingTime += parseInt((Math.random() * 10 + 5).toFixed(2));
+				let waitingTimeForThisStep = dataBusInfo.filter(
+					item =>
+						item["BusCode"] ===
+						kShortestPath[index][step]["busCode"]
+				)[0]["f"];
+				waitingTime += waitingTimeForThisStep;
 			}
 
 			// giá vé
@@ -144,10 +151,29 @@ let searchPossibleTravelRoute = (fromStation, toStation, kShortestPath) => {
 			totalPrice += ticketPrice;
 			// thời gian di chuyển
 
-			travelTime += parseInt(
+			let estimatedSpeed =
+				Object.values(
+					dataBusInfo.filter(
+						item =>
+							item["BusCode"] ===
+							kShortestPath[index][step]["busCode"]
+					)[0]["GoRoute"][
+						dataBusInfo.filter(
+							item =>
+								item["BusCode"] ===
+								kShortestPath[index][step]["busCode"]
+						)[0]["GoRoute"].length - 1
+					]
+				)[0] /
+				dataBusInfo.filter(
+					item =>
+						item["BusCode"] ===
+						kShortestPath[index][step]["busCode"]
+				)[0]["t"];
+
+			travelTime += parseFloat(
 				(
-					kShortestPath[index][step]["distance"] /
-						(Math.random() * 10 + 30) +
+					kShortestPath[index][step]["distance"] / estimatedSpeed +
 					1
 				).toFixed(2)
 			); // do thời gian tạm dừng và bắt đầu đi khi đến trạm bus nên +1 phút
@@ -160,8 +186,8 @@ let searchPossibleTravelRoute = (fromStation, toStation, kShortestPath) => {
 		possibleTravelRoute.push({
 			route: kShortestPath[index],
 			traveledDistance: parseFloat(traveledDistance.toFixed(2)),
-			travelTime: travelTime,
-			waitingTime: waitingTime,
+			travelTime: parseInt(travelTime),
+			waitingTime: parseInt(waitingTime),
 			totalPrice: totalPrice,
 			firstStepComingBus: firstStepComingBus,
 			numberOfBusTransfers: kShortestPath[index].length - 1

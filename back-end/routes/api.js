@@ -4,7 +4,7 @@ let {
 	dataBusInfo,
 	dataBuses,
 	dataStations
-} = require("../controllers/ver2/fakeData.js");
+} = require("../controllers/ver3/fakeData.js");
 
 let {
 	find_K_Route_Between_2_Location

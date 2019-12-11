@@ -1,7 +1,7 @@
 const graphlig = require("graphlib");
 let g = new graphlig.Graph();
 
-let { dataBusInfo } = require("../ver2/fakeData.js");
+let { dataBusInfo } = require("../ver3/fakeData.js");
 
 let dataBusBetween2Locations = {};
 
