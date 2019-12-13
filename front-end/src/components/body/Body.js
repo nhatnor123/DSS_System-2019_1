@@ -24,7 +24,6 @@ class Body extends Component {
 		this.getSuggestedTravelRoute = this.getSuggestedTravelRoute.bind(this);
 		this.getNormalizedData = this.getNormalizedData.bind(this);
 		this.getTOPSISData = this.getTOPSISData.bind(this);
-		this.getTOPSISData2 = this.getTOPSISData2.bind(this)
 	}
 
 	async componentDidMount() {
@@ -108,24 +107,13 @@ class Body extends Component {
 		});
 	}
 
-	async getTOPSISData2(){
-		let resData = (
-			await axios.post(`${IPServerAdress}api/topsisVer2`, {
-				fromStation: this.state.fromStation,
-				toStation: this.state.toStation
-			})
-		).data;
-		console.log(resData);
-		this.setState({
-			phuongAn: resData
-		});
-	}
-
 	render() {
 		return (
 			<div style={{ width: "80%" }}>
 				<div>
-					<div style={{fontSize:"30px" ,marginTop:"10px"}}>From</div>
+					<div style={{ fontSize: "30px", marginTop: "10px" }}>
+						Điểm đi
+					</div>
 					<div style={{ width: "100%" }}>
 						<Select
 							// value={this.state.fromStation}
@@ -135,7 +123,9 @@ class Body extends Component {
 					</div>
 				</div>
 				<div>
-				<div style={{fontSize:"30px", marginTop:"10px"}}>To</div>
+					<div style={{ fontSize: "30px", marginTop: "10px" }}>
+						Điểm đến
+					</div>
 					<div style={{ width: "100%" }}>
 						<Select
 							// value={this.state.toStation}
@@ -149,7 +139,7 @@ class Body extends Component {
 						onClick={this.searchKRouteBetweenFromAndToStation}
 						style={{ fontSize: "20px" }}
 					>
-						Search k shortest path
+						Tìm các lộ trình hợp lý
 					</button>
 				</div>
 				<div style={{ marginTop: "15px" }}>
@@ -157,7 +147,7 @@ class Body extends Component {
 						onClick={this.getSuggestedTravelRoute}
 						style={{ fontSize: "20px" }}
 					>
-						Get Suggested Travel Routes
+						Tìm các lộ trình và thông tin của chúng
 					</button>
 				</div>
 				<div style={{ marginTop: "15px" }}>
@@ -165,7 +155,7 @@ class Body extends Component {
 						onClick={this.getNormalizedData}
 						style={{ fontSize: "20px" }}
 					>
-						Get Normalized Data
+						Lấy dữ liệu đã được chuẩn hóa
 					</button>
 				</div>
 				<div style={{ marginTop: "15px" }}>
@@ -173,7 +163,7 @@ class Body extends Component {
 						onClick={this.getTOPSISData}
 						style={{ fontSize: "20px" }}
 					>
-						Get TOPSIS Data
+						Lấy dữ liệu sau khi dùng TOPSIS
 					</button>
 				</div>
 
@@ -182,16 +172,7 @@ class Body extends Component {
 						onClick={this.getTOPSISData}
 						style={{ fontSize: "30px" }}
 					>
-						Search
-					</button>
-				</div>
-
-				<div style={{ marginTop: "15px" }}>
-					<button
-						onClick={this.getTOPSISData2}
-						style={{ fontSize: "30px" }}
-					>
-						SearchType2
+						Tìm kiếm
 					</button>
 				</div>
 

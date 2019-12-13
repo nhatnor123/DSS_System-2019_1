@@ -5,10 +5,17 @@ let {
 	dataBuses,
 	dataStations
 } = require("../controllers/ver3/fakeData.js");
-
+let {
+	dataBusBetween2Locations
+} = require("../controllers/solutionNumberOfTranferBus/stationsGraph");
 let {
 	find_K_Route_Between_2_Location
 } = require("../controllers/kShortestPath/main");
+
+///
+let {
+	find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location
+} = require("../controllers/solutionNumberOfTranferBus/main");
 
 let {
 	searchPossibleTravelRoute
@@ -17,14 +24,9 @@ let {
 let { normalizeData } = require("../controllers/normalizeData/index");
 
 let { topsis } = require("../controllers/topsis/index");
+///
 
-let {
-	dataBusBetween2Locations
-} = require("../controllers/solutionNumberOfTranferBus/stationsGraph");
 
-let {
-	find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location
-} = require("../controllers/solutionNumberOfTranferBus/main");
 
 // let {dataBusInfo, } = require("../controllers/ver1/test")
 
@@ -35,9 +37,6 @@ router.get("/", (req, res, next) => {
 router.get("/getDataStation", function(req, res, next) {
 	res.json(
 		dataStations.map(item => {
-			// if (item.StationID == 205){
-			//     console.log(item)
-			// }
 			return {
 				StationID: item.StationID,
 				Name: item.Name
@@ -51,7 +50,7 @@ router.post("/find_K_Route_Between_2_Location", (req, res, next) => {
 	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
-		10
+		4
 	);
 	// res.send({ kRoute, dataBusBetween2Locations });
 	res.send(kRoute.slice(0, 30));
@@ -62,7 +61,7 @@ router.post("/getSuggestedTravelRoute", (req, res, next) => {
 	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
-		10
+		4
 	);
 	let possibleTravelRoute = searchPossibleTravelRoute(
 		req.body.fromStation,
@@ -78,7 +77,7 @@ router.post("/normalizeDataFromSearchPossibleTravelRoute", (req, res, next) => {
 	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
-		10
+		4
 	);
 	let possibleTravelRoute = searchPossibleTravelRoute(
 		req.body.fromStation,
@@ -91,34 +90,6 @@ router.post("/normalizeDataFromSearchPossibleTravelRoute", (req, res, next) => {
 });
 
 router.post("/topsis", (req, res, next) => {
-	console.log(req.body);
-	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
-		req.body.fromStation,
-		req.body.toStation,
-		10
-	);
-	let possibleTravelRoute = searchPossibleTravelRoute(
-		req.body.fromStation,
-		req.body.toStation,
-		kRoute.slice(0, 30)
-	);
-	let boTrongSo = [0.4, 0.3, 0.1, 0.1, 0.1];
-	let normalizedData = normalizeData(possibleTravelRoute);
-	let topsisData = topsis(normalizedData, boTrongSo);
-
-	for (let index = 0; index < possibleTravelRoute.length; index++) {
-		possibleTravelRoute[index]["topsisData"] = topsisData[index];
-	}
-
-	// sort các phương án theo điểm TOPSIS
-	possibleTravelRoute.sort((x, y) => {
-		return -x["topsisData"] + y["topsisData"];
-	});
-
-	res.send({ possibleTravelRoute });
-});
-
-router.post("/topsisVer2", (req, res, next) => {
 	console.log(req.body);
 	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
