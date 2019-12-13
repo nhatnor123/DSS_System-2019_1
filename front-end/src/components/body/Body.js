@@ -24,6 +24,7 @@ class Body extends Component {
 		this.getSuggestedTravelRoute = this.getSuggestedTravelRoute.bind(this);
 		this.getNormalizedData = this.getNormalizedData.bind(this);
 		this.getTOPSISData = this.getTOPSISData.bind(this);
+		this.getTOPSISData2 = this.getTOPSISData2.bind(this)
 	}
 
 	async componentDidMount() {
@@ -107,6 +108,19 @@ class Body extends Component {
 		});
 	}
 
+	async getTOPSISData2(){
+		let resData = (
+			await axios.post(`${IPServerAdress}api/topsisVer2`, {
+				fromStation: this.state.fromStation,
+				toStation: this.state.toStation
+			})
+		).data;
+		console.log(resData);
+		// this.setState({
+		// 	phuongAn: resData
+		// });
+	}
+
 	render() {
 		return (
 			<div style={{ width: "80%" }}>
@@ -130,7 +144,7 @@ class Body extends Component {
 						/>
 					</div>
 				</div>
-				{/* <div style={{ marginTop: "15px" }}>
+				<div style={{ marginTop: "15px" }}>
 					<button
 						onClick={this.searchKRouteBetweenFromAndToStation}
 						style={{ fontSize: "20px" }}
@@ -161,7 +175,7 @@ class Body extends Component {
 					>
 						Get TOPSIS Data
 					</button>
-				</div> */}
+				</div>
 
 				<div style={{ marginTop: "15px" }}>
 					<button
@@ -169,6 +183,15 @@ class Body extends Component {
 						style={{ fontSize: "30px" }}
 					>
 						Search
+					</button>
+				</div>
+
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.getTOPSISData2}
+						style={{ fontSize: "30px" }}
+					>
+						SearchType2
 					</button>
 				</div>
 

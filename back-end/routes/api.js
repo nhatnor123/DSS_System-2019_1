@@ -9,11 +9,22 @@ let {
 let {
 	find_K_Route_Between_2_Location
 } = require("../controllers/kShortestPath/main");
+
 let {
 	searchPossibleTravelRoute
 } = require("../controllers/routeBetween2Stations/index");
+
 let { normalizeData } = require("../controllers/normalizeData/index");
+
 let { topsis } = require("../controllers/topsis/index");
+
+let {
+	dataBusBetween2Locations
+} = require("../controllers/solutionNumberOfTranferBus/stationsGraph");
+
+let {
+	find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location
+} = require("../controllers/solutionNumberOfTranferBus/main");
 
 // let {dataBusInfo, } = require("../controllers/ver1/test")
 
@@ -42,7 +53,7 @@ router.post("/find_K_Route_Between_2_Location", (req, res, next) => {
 		req.body.toStation,
 		10
 	);
-	res.send(kRoute);
+	res.send({ kRoute, dataBusBetween2Locations });
 });
 
 router.post("/getSuggestedTravelRoute", (req, res, next) => {
@@ -104,6 +115,16 @@ router.post("/topsis", (req, res, next) => {
 	});
 
 	res.send({ possibleTravelRoute });
+});
+
+router.post("/topsisVer2", (req, res, next) => {
+	console.log(req.body);
+	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
+		req.body.fromStation,
+		req.body.toStation,
+		4
+	);
+	res.send({cacXeGiua2Tram:kRoute})
 });
 
 module.exports = router;
