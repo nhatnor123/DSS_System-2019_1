@@ -116,9 +116,9 @@ class Body extends Component {
 			})
 		).data;
 		console.log(resData);
-		// this.setState({
-		// 	phuongAn: resData
-		// });
+		this.setState({
+			phuongAn: resData
+		});
 	}
 
 	render() {

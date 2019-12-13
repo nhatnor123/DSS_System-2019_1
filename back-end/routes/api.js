@@ -48,17 +48,18 @@ router.get("/getDataStation", function(req, res, next) {
 
 router.post("/find_K_Route_Between_2_Location", (req, res, next) => {
 	console.log(req.body);
-	let kRoute = find_K_Route_Between_2_Location(
+	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
 		10
 	);
-	res.send({ kRoute, dataBusBetween2Locations });
+	// res.send({ kRoute, dataBusBetween2Locations });
+	res.send(kRoute)
 });
 
 router.post("/getSuggestedTravelRoute", (req, res, next) => {
 	console.log(req.body);
-	let kRoute = find_K_Route_Between_2_Location(
+	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
 		10
@@ -74,7 +75,7 @@ router.post("/getSuggestedTravelRoute", (req, res, next) => {
 
 router.post("/normalizeDataFromSearchPossibleTravelRoute", (req, res, next) => {
 	console.log(req.body);
-	let kRoute = find_K_Route_Between_2_Location(
+	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
 		10
@@ -91,7 +92,7 @@ router.post("/normalizeDataFromSearchPossibleTravelRoute", (req, res, next) => {
 
 router.post("/topsis", (req, res, next) => {
 	console.log(req.body);
-	let kRoute = find_K_Route_Between_2_Location(
+	let kRoute = find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location(
 		req.body.fromStation,
 		req.body.toStation,
 		10
@@ -124,7 +125,25 @@ router.post("/topsisVer2", (req, res, next) => {
 		req.body.toStation,
 		4
 	);
-	res.send({cacXeGiua2Tram:kRoute})
+	let possibleTravelRoute = searchPossibleTravelRoute(
+		req.body.fromStation,
+		req.body.toStation,
+		kRoute.slice(0,30)
+	);
+	let boTrongSo = [0.4, 0.3, 0.1, 0.1, 0.1];
+	let normalizedData = normalizeData(possibleTravelRoute);
+	let topsisData = topsis(normalizedData, boTrongSo);
+
+	for (let index = 0; index < possibleTravelRoute.length; index++) {
+		possibleTravelRoute[index]["topsisData"] = topsisData[index];
+	}
+
+	// sort các phương án theo điểm TOPSIS
+	possibleTravelRoute.sort((x, y) => {
+		return -x["topsisData"] + y["topsisData"];
+	});
+
+	res.send({ possibleTravelRoute });
 });
 
 module.exports = router;
