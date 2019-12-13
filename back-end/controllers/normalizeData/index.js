@@ -1,9 +1,10 @@
 let normalizeData = possibleTravelRoute => {
-	console.log(possibleTravelRoute);
+	console.log(possibleTravelRoute[0]);
 	// chuẩn hóa theo tuyến tính với giá trị nhỏ nhất thì là 1
 	let minNumberOfBusTransfers = Math.min(
-		...possibleTravelRoute.map(item => item["numberOfBusTransfers"])
+		...possibleTravelRoute.map(item => item["numberOfBusTransfers"] + 1)
 	);
+	console.log(minNumberOfBusTransfers);
 	let minTotalPrice = Math.min(
 		...possibleTravelRoute.map(item => item["totalPrice"])
 	);
@@ -21,7 +22,7 @@ let normalizeData = possibleTravelRoute => {
 		return {
 			...item,
 			numberOfBusTransfers:
-				minNumberOfBusTransfers / item["numberOfBusTransfers"],
+				minNumberOfBusTransfers / (item["numberOfBusTransfers"] + 1),
 			totalPrice: minTotalPrice / item["totalPrice"],
 			travelTime: minTravelTime / item["travelTime"],
 			traveledDistance: minTraveledDistance / item["traveledDistance"],

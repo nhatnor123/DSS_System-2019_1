@@ -54,7 +54,7 @@ router.post("/find_K_Route_Between_2_Location", (req, res, next) => {
 		10
 	);
 	// res.send({ kRoute, dataBusBetween2Locations });
-	res.send(kRoute)
+	res.send(kRoute.slice(0, 30));
 });
 
 router.post("/getSuggestedTravelRoute", (req, res, next) => {
@@ -67,7 +67,7 @@ router.post("/getSuggestedTravelRoute", (req, res, next) => {
 	let possibleTravelRoute = searchPossibleTravelRoute(
 		req.body.fromStation,
 		req.body.toStation,
-		kRoute
+		kRoute.slice(0, 30)
 	);
 
 	res.send(possibleTravelRoute);
@@ -83,7 +83,7 @@ router.post("/normalizeDataFromSearchPossibleTravelRoute", (req, res, next) => {
 	let possibleTravelRoute = searchPossibleTravelRoute(
 		req.body.fromStation,
 		req.body.toStation,
-		kRoute
+		kRoute.slice(0, 30)
 	);
 	let normalizedData = normalizeData(possibleTravelRoute);
 
@@ -100,7 +100,7 @@ router.post("/topsis", (req, res, next) => {
 	let possibleTravelRoute = searchPossibleTravelRoute(
 		req.body.fromStation,
 		req.body.toStation,
-		kRoute
+		kRoute.slice(0, 30)
 	);
 	let boTrongSo = [0.4, 0.3, 0.1, 0.1, 0.1];
 	let normalizedData = normalizeData(possibleTravelRoute);
@@ -128,7 +128,7 @@ router.post("/topsisVer2", (req, res, next) => {
 	let possibleTravelRoute = searchPossibleTravelRoute(
 		req.body.fromStation,
 		req.body.toStation,
-		kRoute.slice(0,30)
+		kRoute.slice(0, 30)
 	);
 	let boTrongSo = [0.4, 0.3, 0.1, 0.1, 0.1];
 	let normalizedData = normalizeData(possibleTravelRoute);

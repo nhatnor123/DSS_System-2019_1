@@ -24,7 +24,7 @@ let find_Routes_Have_k_Max_Transfer_Bus_Between_2_Location = (
 	console.log("tìm lộ trình chỉ có 3 trạm xe bus qua 2 điểm start và end");
 	// find3BusFromStartToEndStation(startStation, endStation);
 
-	let rs = find2BusFromStartToEndStation(startStation, endStation);
+	let rs = find3BusFromStartToEndStation(startStation, endStation);
 
 	console.log("START------------------------------");
 	// let xxx = findRouteFromStartToEndStationWithUnmore_K_TransferBus(
