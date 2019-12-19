@@ -13,7 +13,14 @@ class Body extends Component {
 			fromStation: "",
 			toStation: "",
 			options: [],
-			phuongAn: null
+			phuongAn: null,
+			argumentValue: {
+				quangDuong: null,
+				thoiGianDoiXe: null,
+				thoiGianDiChuyen: null,
+				tongGiaVe: null,
+				soLanChuyenXe: null
+			}
 		};
 
 		this.selectFromStation = this.selectFromStation.bind(this);
@@ -24,6 +31,10 @@ class Body extends Component {
 		this.getSuggestedTravelRoute = this.getSuggestedTravelRoute.bind(this);
 		this.getNormalizedData = this.getNormalizedData.bind(this);
 		this.getTOPSISData = this.getTOPSISData.bind(this);
+		this.get_dataBusBetween2Locations = this.get_dataBusBetween2Locations.bind(
+			this
+		);
+		this.thayDoiGiaTriBoTrongSo = this.thayDoiGiaTriBoTrongSo.bind(this);
 	}
 
 	async componentDidMount() {
@@ -98,13 +109,36 @@ class Body extends Component {
 		let resData = (
 			await axios.post(`${IPServerAdress}api/topsis`, {
 				fromStation: this.state.fromStation,
-				toStation: this.state.toStation
+				toStation: this.state.toStation,
+				argumentValue: this.state.argumentValue
 			})
 		).data;
 		console.log(resData);
 		this.setState({
 			phuongAn: resData
 		});
+	}
+
+	async get_dataBusBetween2Locations() {
+		let resData = (
+			await axios.get(`${IPServerAdress}api/dataBusBetween2Locations`, {
+				fromStation: this.state.fromStation,
+				toStation: this.state.toStation
+			})
+		).data;
+		console.log(resData);
+	}
+
+	thayDoiGiaTriBoTrongSo(target) {
+		return event => {
+			this.setState({
+				...this.state,
+				argumentValue: {
+					...this.state.argumentValue,
+					[target]: event.target.value
+				}
+			});
+		};
 	}
 
 	render() {
@@ -133,6 +167,80 @@ class Body extends Component {
 							options={this.state.options}
 						/>
 					</div>
+				</div>
+				<div>
+					<div style={{ fontSize: "30px", marginTop: "10px" }}>
+						Bộ trọng số
+					</div>
+					<div
+						style={{
+							width: "80%",
+							display: "flex",
+							flexDirection: "row",
+							fontSize: "23px"
+						}}
+					>
+						<div>
+							Quãng đường di chuyển
+							<input
+								type="text"
+								value={this.state.argumentValue.quangDuong}
+								onChange={this.thayDoiGiaTriBoTrongSo(
+									"quangDuong"
+								)}
+							/>
+						</div>
+						<div>
+							Thời gian đợi xe
+							<input
+								type="text"
+								value={this.state.argumentValue.thoiGianDoiXe}
+								onChange={this.thayDoiGiaTriBoTrongSo(
+									"thoiGianDoiXe"
+								)}
+							/>
+						</div>
+						<div>
+							Thời gian di chuyển
+							<input
+								type="text"
+								value={
+									this.state.argumentValue.thoiGianDiChuyen
+								}
+								onChange={this.thayDoiGiaTriBoTrongSo(
+									"thoiGianDiChuyen"
+								)}
+							/>
+						</div>
+						<div>
+							Tổng giá vé
+							<input
+								type="text"
+								value={this.state.argumentValue.tongGiaVe}
+								onChange={this.thayDoiGiaTriBoTrongSo(
+									"tongGiaVe"
+								)}
+							/>
+						</div>
+						<div>
+							Số lần chuyển xe
+							<input
+								type="text"
+								value={this.state.argumentValue.soLanChuyenXe}
+								onChange={this.thayDoiGiaTriBoTrongSo(
+									"soLanChuyenXe"
+								)}
+							/>
+						</div>
+					</div>
+				</div>
+				<div style={{ marginTop: "15px" }}>
+					<button
+						onClick={this.get_dataBusBetween2Locations}
+						style={{ fontSize: "20px" }}
+					>
+						Tìm dataBusBetween2Locations
+					</button>
 				</div>
 				<div style={{ marginTop: "15px" }}>
 					<button

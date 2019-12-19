@@ -26,8 +26,6 @@ let { normalizeData } = require("../controllers/normalizeData/index");
 let { topsis } = require("../controllers/topsis/index");
 ///
 
-
-
 // let {dataBusInfo, } = require("../controllers/ver1/test")
 
 router.get("/", (req, res, next) => {
@@ -101,7 +99,28 @@ router.post("/topsis", (req, res, next) => {
 		req.body.toStation,
 		kRoute.slice(0, 30)
 	);
-	let boTrongSo = [0.4, 0.3, 0.1, 0.1, 0.1];
+
+	let boTrongSo;
+	if (
+		req.body["argumentValue"]["quangDuong"] == null ||
+		req.body["argumentValue"]["thoiGianDoiXe"] == null ||
+		req.body["argumentValue"]["thoiGianDiChuyen"] == null ||
+		req.body["argumentValue"]["tongGiaVe"] == null ||
+		req.body["argumentValue"]["soLanChuyenXe"] == null
+	) {
+		boTrongSo = [0.4, 0.3, 0.1, 0.1, 0.1];
+	} else {
+		boTrongSo = [
+			parseFloat(req.body["argumentValue"]["soLanChuyenXe"]),
+			parseFloat(req.body["argumentValue"]["tongGiaVe"]),
+			parseFloat(req.body["argumentValue"]["thoiGianDiChuyen"]),
+			parseFloat(req.body["argumentValue"]["quangDuong"]),
+			parseFloat(req.body["argumentValue"]["thoiGianDoiXe"])
+		];
+	}
+	console.log("boTrongSo");
+	console.log(boTrongSo);
+
 	let normalizedData = normalizeData(possibleTravelRoute);
 	let topsisData = topsis(normalizedData, boTrongSo);
 
@@ -115,6 +134,10 @@ router.post("/topsis", (req, res, next) => {
 	});
 
 	res.send({ possibleTravelRoute });
+});
+
+router.get("/dataBusBetween2Locations", (req, res, next) => {
+	res.send(dataBusBetween2Locations);
 });
 
 module.exports = router;
